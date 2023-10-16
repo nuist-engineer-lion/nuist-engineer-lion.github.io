@@ -1,0 +1,5 @@
+# VitePress generated files
+node_modules/
+dist/
+cache/
+temp/
