@@ -12,6 +12,7 @@
   "author": "",
   "license": "AGPL-3.0-or-later",
   "dependencies": {
-    "vitepress": "1.0.0-rc.22"
+    "vitepress": "1.0.0-rc.22",
+    "vitepress-plugin-auto-sidebar": "^1.1.0"
   }
 }

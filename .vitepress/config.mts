@@ -1,8 +1,6 @@
 import { defineConfig } from 'vitepress'
-import load from '../docs/loader.data.mjs'
+import { getSidebar } from 'vitepress-plugin-auto-sidebar'
 
-// @ts-ignore allow top level await 
-const data = await load.load()
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
@@ -12,14 +10,20 @@ export default defineConfig({
     // https://vitepress.dev/reference/default-theme-config
     nav: [
       { text: '修机文档', link: '/docs/' },
-      { text: '历届部长团', link: '/previous-team' },
+      { text: '历届部长团', link: '/team/2020' },
     ],
-    sidebar:{
+    sidebar:
+    {
       "/docs/":[{
         text: "修机日志",
-        items: data
+        items: getSidebar({ contentRoot: '/', contentDirs:["docs"],collapsible: false, collapsed: false })
+      }],
+      "/team/":[{
+        text: "历届部长团",
+        items: getSidebar({ contentRoot: '/', contentDirs:["team"],collapsible: false, collapsed: false })
       }]
     },
+    // getSidebar({ contentRoot: '/', contentDirs:["team","docs"],collapsible: false, collapsed: false }),
 
     // sidebar: [
     //   {
@@ -32,7 +36,7 @@ export default defineConfig({
     // ],
 
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/vuejs/vitepress' }
+      { icon: 'github', link: 'https://github.com/nuist-engineer-lion/nuist-engineer-lion.github.io' }
     ]
   }
 })
