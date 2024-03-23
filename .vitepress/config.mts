@@ -4,7 +4,7 @@ import { getSidebar } from 'vitepress-plugin-auto-sidebar'
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
-  title: "Nuist Sast Archive",
+  title: "Nuist ITD Archive",
   description: "Archive Station",
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
