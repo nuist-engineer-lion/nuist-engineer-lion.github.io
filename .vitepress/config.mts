@@ -11,6 +11,7 @@ export default defineConfig({
     nav: [
       { text: '修机文档', link: '/docs/' },
       { text: '历届部长团', link: '/team/2020' },
+      {text: '成员资源仓库', link: '/store/index' },
     ],
     sidebar:
     {
