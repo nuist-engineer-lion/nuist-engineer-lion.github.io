@@ -22,6 +22,10 @@ export default defineConfig({
         text: "历届部长团",
         items: getSidebar({ contentRoot: '/', contentDirs:["team"],collapsible: false, collapsed: false })
       }]
+      "/store/":[{
+        text: "成员资源仓库",
+        items: getSidebar({ contentRoot: '/', contentDirs:["store"],collapsible: false, collapsed: false })
+      }],
     },
     // getSidebar({ contentRoot: '/', contentDirs:["team","docs"],collapsible: false, collapsed: false }),
 
