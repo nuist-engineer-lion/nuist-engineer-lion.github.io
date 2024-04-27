@@ -8,10 +8,11 @@ export default defineConfig({
   description: "Archive Station",
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
+    logo: '/assets/logo.svg',
     nav: [
       { text: '修机文档', link: '/docs/' },
       { text: '历届部长团', link: '/team/2020' },
-      {text: '成员资源仓库', link: '/store/index' },
+      {text: '成员资源仓库', link: '/store/' },
     ],
     sidebar:
     {
@@ -22,11 +23,7 @@ export default defineConfig({
       "/team/":[{
         text: "历届部长团",
         items: getSidebar({ contentRoot: '/', contentDirs:["team"],collapsible: false, collapsed: false })
-      }],
-      "/store/":[{
-        text: "成员资源仓库",
-        items: getSidebar({ contentRoot: '/', contentDirs:["store"],collapsible: false, collapsed: false })
-      }],
+      }]
     },
     // getSidebar({ contentRoot: '/', contentDirs:["team","docs"],collapsible: false, collapsed: false }),
 

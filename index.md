@@ -4,10 +4,10 @@ layout: home
 
 hero:
   name: "Nuist ITD Archive"
-  text: "信息技术部档案馆"
-  tagline: “历史活动是群众的事业，随着历史活动的深入，必将是群众队伍的扩大。“——《神圣家族》
+  text: "信息技术档案馆"
+  tagline: 历史活动是群众的事业，随着历史活动的深入，必将是群众队伍的扩大。——《神圣家族》
   image:
-    src: /assets/Teamwork.png
+    src: /assets/logo.svg
 #   actions:
 #     - theme: brand
 #       text: Markdown Examples
