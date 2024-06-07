@@ -3,7 +3,7 @@
 layout: home
 
 hero:
-  name: "Nuist ITD Archive"
+  name: "海上修机师"
   text: "信息技术档案馆"
   tagline: 历史活动是群众的事业，随着历史活动的深入，必将是群众队伍的扩大。——《神圣家族》
   image:
