@@ -44,7 +44,7 @@ jobs:
           pnpm build
 
       - name: Upload GhPages Artifact
-        uses: actions/upload-pages-artifact@v1
+        uses: actions/upload-pages-artifact@v3
         with:
           path: ./.vitepress/dist
 
