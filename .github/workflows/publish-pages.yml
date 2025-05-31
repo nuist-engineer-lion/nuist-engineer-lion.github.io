@@ -23,11 +23,11 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Cache node modules
         id: cache-npm
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         env:
           cache-name: cache-node-modules
         with:
@@ -39,14 +39,15 @@ jobs:
 
       - name: Install dependency and build
         run: |
+          npm install -g corepack@latest
           corepack enable
           pnpm i
           pnpm build
 
       - name: Upload GhPages Artifact
-        uses: actions/upload-pages-artifact@v1
+        uses: actions/upload-pages-artifact@v4
         with:
-          path: ./.vitepress/dist
+          path: ./.vitepress/dist/
 
 
   deploy-github-pages:
@@ -59,7 +60,7 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v1
+        uses: actions/deploy-pages@v4
 
   
   # deploy-cloudbase:
@@ -69,7 +70,7 @@ jobs:
   #   steps:
   #     - name: Cache node modules
   #       id: cache-npm
-  #       uses: actions/cache@v3
+  #       uses: actions/cache@v4
   #       env:
   #         cache-name: cache-node-modules
   #       with:
@@ -79,7 +80,7 @@ jobs:
   #         restore-keys: cloudbase-cli
 
   #     - name: Download Artifact
-  #       uses: actions/download-artifact@v3
+  #       uses: actions/download-artifact@v4
   #       with:
   #         name: dist
   #         path: ./dist
