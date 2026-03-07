@@ -14,7 +14,7 @@
 
 以用户 `jupyter` 为例，执行以下命令：
 
-```bash
+```powershell
 curl https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh | bash
 ```
 
