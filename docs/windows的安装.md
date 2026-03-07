@@ -68,7 +68,7 @@ windows把安装镜像打包压缩成了win或者esd格式，并且可以把多�
 
 这是windows原生的引导启动管理工具，可以用来修复或者新建启动项（当然只有windwos，可能他就是顶掉你grub的罪魁祸首）比如
 
-```{bash}
+```bash
 bcdboot C:\Windows /s S:
 ```
 

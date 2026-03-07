@@ -8,12 +8,11 @@
 
 启动安装程序，一路下一步，直到如图所示，建议全部勾选
 
-![](./images/VSCode/media/image1.png){width="4.927083333333333in"
-height="3.7083333333333335in"}
+![](./images/VSCode/media/image1.png)
 
 **(可选)**安装**中文**语言包：按Ctrl+Shift+X，输入\"Chinese\"，点Install
 
-![](./images/VSCode/media/image2.png){width="5.75in" height="3.4375in"}
+![](./images/VSCode/media/image2.png)
 
 **环境配置**
 
@@ -27,7 +26,7 @@ height="3.7083333333333335in"}
 
 打开vsc，随便找个地方新建个.py文件，如\"hello.py\"文件，打开，**右下角**会弹出一个弹窗，点击Install
 
-![](./images/VSCode/media/image3.png){width="4.75in" height="1.21875in"}
+![](./images/VSCode/media/image3.png)
 
 **(可选)**安装vsc的**jupyter notebook**支持：
 
@@ -37,11 +36,9 @@ height="3.7083333333333335in"}
 
 **上方**会弹出一个弹窗，选择Install，并一路点Install
 
-![](./images/VSCode/media/image4.png){width="5.645833333333333in"
-height="1.5in"}
+![](./images/VSCode/media/image4.png)
 
-![](./images/VSCode/media/image5.png){width="5.75in"
-height="1.5208333333333333in"}
+![](./images/VSCode/media/image5.png)
 
 **C/C++**
 
@@ -81,8 +78,7 @@ height="1.5208333333333333in"}
 
 重新打开vsc，随便找个地方新建个.c或.cpp文件，如\"hello.cpp\"，打开，**右下角**会弹出一个弹窗，点击Install
 
-![](./images/VSCode/media/image6.png){width="4.677083333333333in"
-height="1.09375in"}
+![](./images/VSCode/media/image6.png)
 
 大功告成，点击**右上角**的**▷**按钮**运行**即可，可以在▷右边的下拉列表里选择**运行**或**调试**
 
@@ -111,8 +107,7 @@ nodejs，也可以到官网https://nodejs.org/下载安装包
 
 1\. **CodeSnap**
 
-![](./images/VSCode/media/image7.png){width="5.75in"
-height="4.041666666666667in"}
+![](./images/VSCode/media/image7.png)
 
 生成漂亮的代码截图
 

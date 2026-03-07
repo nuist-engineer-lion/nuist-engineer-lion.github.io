@@ -88,8 +88,7 @@ Windows 11 22H2 专业版（内部版本 22621.3296）为例。
 
 打开任务管理器,进入\"性能\",查看\"CPU\",检查\"虚拟化\"是否开启.如果"虚拟化"一栏显示\"已启用\"，则没有任何问题，进入第三步。如果显示"已禁用"，则请继续阅读.
 
-![](./images/WSL/media/image1.png){width="5.75in"
-height="2.9583333333333335in"}
+![](./images/WSL/media/image1.png)
 
 进入bios(参见[摘录自msdn的教程文章](https://e0w6uca6qjf.feishu.cn/wiki/RYctwD2DPiaP9pkpj8lcYfIanRb)),选择在上方的【Configuration】选项，然后将最下方的【Intel
 Virtual Technology】，设置为【Enable】的状态即可,记得保存.
@@ -116,8 +115,7 @@ Virtual Technology】，设置为【Enable】的状态即可,记得保存.
 
 在搜索栏中搜索启用或关闭Windows功能,勾选\"适用于Linux的Windows子系统\"和\"虚拟机平台功能\".
 
-![](./images/WSL/media/image2.png){width="5.75in"
-height="5.427083333333333in"}
+![](./images/WSL/media/image2.png)
 
 然后重启计算机即可
 
