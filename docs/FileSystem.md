@@ -1,11 +1,4 @@
-参考：
-- <https://www.cnblogs.com/cyx-b/p/14091603.html>
-- <https://zhuanlan.zhihu.com/p/183238194>
-- <https://zhuanlan.zhihu.com/p/448817053>
-- <https://learn.microsoft.com/zh-cn/windows-server/storage/file-server/ntfs-overview>
-- <https://linux.cn/article-7083-1.html>
-- <https://juejin.cn/post/6844903664235069454>
-- 
+# FileSystem（文件系统）
 
 ## 分区表
 
@@ -46,7 +39,7 @@ ESP分区(EFI系统分区)存储着启动需要的.efi文件,代替主引导记�
 
 (linux的文件权限存在文件系统里,win存在注册表或者其他什么东西里)
 
-一些常见文件系统以及其特点
+一些常见文件系统以及其特点：
 
 ### ext4
 
@@ -62,9 +55,23 @@ win开发出来的一系列文件系统,其中FAT16,FAT32都是以及淘汰调�
 
 exFAT是去除了日志等功能(读写更少)的NTFS,常用于,但所能存储的单文件的最大大小是大于NTFS的.一般多用于移动存储介质.
 
+### ReFS (弹性文件系统)
+
+ReFS 是 Microsoft 开发的新式文件系统，专注于数据可用性、大规模数据集扩展、数据完整性及损坏复原能力。ReFS 最大卷 35 PB，NTFS 为 256 TB；ReFS 不支持部分 NTFS 功能（如事务、ODX），但提供更强的数据完整性及大规模优化。
+
+详情请参考 <https://learn.microsoft.com/zh-cn/windows-server/storage/refs/refs-overview>
+
 ## 分区复制
 
 如何实现一个分区的复制?
 可以在另一个盘上分好一个相同大小的分区,然后直接按扇区把数据复制过去.
 也可以分一个新区然后通过文件系统操作把文件拷贝过去.
 当然也复制完了之后也可以通过修改GUID让新分区的GUID和原分区一样.
+
+参考：
+- <https://www.cnblogs.com/cyx-b/p/14091603.html>
+- <https://zhuanlan.zhihu.com/p/183238194>
+- <https://zhuanlan.zhihu.com/p/448817053>
+- <https://learn.microsoft.com/zh-cn/windows-server/storage/file-server/ntfs-overview>
+- <https://linux.cn/article-7083-1.html>
+- <https://juejin.cn/post/6844903664235069454>
