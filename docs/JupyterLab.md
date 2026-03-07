@@ -1,251 +1,243 @@
-**JupyterLab**
+# JupyterLab 安装与配置指南
 
-**概述**
+## 概述
 
-你不觉得每次都用概述开头很奇怪吗
+本教程将指导你在 Linux 系统上以普通用户身份安装和配置 JupyterLab，并通过 systemd 用户服务实现后台运行，最后使用 Nginx 进行反向代理。
 
-**安装环境**
+## 安装环境
 
 你可以使用anaconda来安装虚拟环境，但是这里使用miniconda
 
-注意，该安装包源可能在国外，你的网速会比较慢
+> 注意：Miniconda 安装源在国外，下载可能较慢。推荐使用国内镜像加速。
 
-我们推荐你直接使用用户级别的安装，而不是ROOT用户，为了避免污染其他用户和机器的环境
+### 1. 下载并安装 Miniconda
 
-这里以用户jupyter为例
+以用户 `jupyter` 为例，执行以下命令：
 
-执行安装命令
+```bash
+curl https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh | bash
+```
 
-  -----------------------------------------------------------------------
-  Bash\
-  curl
-  https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
-  \| bash
+安装过程中按提示阅读协议并同意，安装完成后执行：
 
-  -----------------------------------------------------------------------
+```bash
+sudo -
+conda init
+```
 
-他会自己下载后安装，然后你会被要求查阅一些文本以及同意协议之类的，总之安装完成后执行
+初始化后，终端提示符前会出现 `(base)` 字样，说明 conda 已就绪。
 
-  -----------------------------------------------------------------------
-  Bash\
-  sudo -
+### 2. 配置国内镜像源
 
-  -----------------------------------------------------------------------
+强烈建议更换为国内镜像源，否则后续 JupyterLab 插件加载可能失败。参考 [清华 TUNA 镜像站帮助](https://mirrors.tuna.tsinghua.edu.cn/help/anaconda/)。
 
-然后执行
+## 安装 JupyterLab
 
-  -----------------------------------------------------------------------
-  Bash\
-  conda init
+### 1. 创建虚拟环境
 
-  -----------------------------------------------------------------------
+创建一个名为 `Jupyter` 的虚拟环境，指定 Python 版本（本例使用 Python 3.8，你也可以选择 3.10 或更高）：
 
-此时应该会初始化终端，你可以看到终端左侧有一个括号（bash），说明初始化完成
+```bash
+conda create -n Jupyter python=3.8
+```
 
-添加源，这部分推荐你参考 [Tuna
-Conda](https://mirrors.tuna.tsinghua.edu.cn/help/anaconda/) 的内容
+### 2. 安装 JupyterLab
 
-务必替换源，否则jupyterLab插件加载将会报错
+推荐使用 conda 安装：
 
-**安装JupyterLab**
+```bash
+conda install jupyterlab
+```
 
-创建一个虚拟环境用于存放jupyter，由于python 3.7结束维护
-我们使用python3.8 ，实际上更推荐你使用python3.10 作为日常使用版本
+同时安装 notebook 组件：
 
-  -----------------------------------------------------------------------
-  Bash\
-  conda create -n Jupyter python=3.8
+```bash
+pip install notebook
+```
 
-  -----------------------------------------------------------------------
+### 3. 生成配置文件
 
-然后安装jupyterlab，推荐使用conda安装
+```bash
+jupyter-lab --generate-config
+```
 
-  -----------------------------------------------------------------------
-  Bash\
-  conda install jupyterlab
+记下生成的配置文件路径（通常位于 `~/.jupyter/jupyter_lab_config.py`）。
 
-  -----------------------------------------------------------------------
+### 4. 设置访问密码
 
-然后安装一下notebook
+```bash
+jupyter-notebook password
+```
 
-  -----------------------------------------------------------------------
-  Bash\
-  pip install notebook
+按照提示输入密码，系统会生成一个哈希密码并保存在 `~/.jupyter/jupyter_server_config.json` 中。**请保存好这个哈希值**，后续配置需要用到。
 
-  -----------------------------------------------------------------------
+### 5. 修改配置文件
 
-安装完后生成一下配置文件
+编辑配置文件 `~/.jupyter/jupyter_lab_config.py`：
 
-  -----------------------------------------------------------------------
-  Bash\
-  jupyter-lab \--generate-config
+```bash
+nano ~/.jupyter/jupyter_lab_config.py
+```
 
-  -----------------------------------------------------------------------
+将内容替换为以下配置（根据实际情况调整）：
 
-记住生成的位置，然后现在生成一个访问密码：
+```python
+# Configuration file for lab.
 
-  -----------------------------------------------------------------------
-  Plain Text\
-  jupyter-notebook password
+c = get_config()  # noqa
 
-  -----------------------------------------------------------------------
+# 跨域设置
+c.ServerApp.allow_origin = '*'
 
-记得保存生成的秘钥，然后前往配置文件，就是刚刚生成的那个路径，一般在./jupyter里
+# 安装 pip install jupyter-resource-usage 后可显示 CPU 使用率
+c.ResourceUseDisplay.track_cpu_percent = True
 
-  -----------------------------------------------------------------------
-  Bash\
-  nano jupyter_lab_config.py
+# 监听所有网络接口（如需远程访问设为 '0.0.0.0'）
+c.ServerApp.ip = '0.0.0.0'
 
-  -----------------------------------------------------------------------
+# 此处填写上面生成的密码哈希值
+c.PasswordIdentityProvider.hashed_password = 'argon2:...'
 
-替换配置文件为：
+# 禁止自动打开浏览器
+c.ServerApp.open_browser = False
 
-  --------------------------------------------------------------------------
-  Python\
-  \# Configuration file for lab.\
-  \
-  c = get_config() #noqa\
-  \# 跨域设置\
-  c.ServerApp.allow_origin=\"\*\"\
-  \# 安装pip install
-  jupyter-resource-usage后显式CPU使用率，不安装这个选项无意义\
-  c.ResourceUseDisplay.track_cpu_percent = True\
-  #这里填写远程访问的IP名，如果对外开放访问使用
-  0.0.0.0，否则填局域网的IP地址\
-  c.ServerApp.ip = \'0.0.0.0\'\
-  \# 这里的密码填写上面生成的密钥\
-  c.PasswordIdentityProvider.hashed_password =
-  \'argon2:整个字符串替换为你的密码编码\'\
-  c.ServerApp.open_browser = False\
-  \# 打开jupyter lab的端口，端口自定义\
-  c.ServerApp.port = 8866\
-  \# 允许远程访问\
-  c.ServerApp.allow_remote_access = True\
-  \# jupyter lab工作文件的路径，根据你的需求设置\
-  c.ServerApp.root_dir = \'jupyterCode\'\
-  \
-  \# 跨站请求伪造（Cross-Site Request Forgery, XSRF）保护的启用或禁用\
-  c.ServerApp.disable_check_xsrf = True\
-  \# kernel是否自动重启\
-  c.KernelManager.autorestart = True\
-  \# 是否运行修改密码\
-  c.ServerApp.allow_password_change = True\
-  \# 是否有退出按钮\
-  c.ServerApp.quit_button = False\
-  \#
-  长时间不允许自动停止，不建议开启，否则jupyter会在运行一段时间后自己关闭\
-  c.ServerApp.shutdown_no_activity_timeout = 0\
-  \# 启动terminal\
-  c.ServerApp.terminals_enabled = True\
-  \# terminal路径\
-  c.ServerApp.terminado_settings = {\'shell_command\' : \[\'/bin/bash\'\]}\
-  \# 是否允许root运行\
-  c.ServerApp.allow_root = False\
-  \# memory监控\
-  c.ResourceUseDisplay.mem_limit = 32\*1024\*1024\*1024\
-  \# cpu监控\
-  c.ResourceUseDisplay.track_cpu_percent = True\
-  \# cpu核数\
-  c.ResourceUseDisplay.cpu_limit = 4
-
-  --------------------------------------------------------------------------
-
-记得仔细核对配置清单，然后尝试启动服务看看是否有报错、是否能通过密码正确访问
-
-  -----------------------------------------------------------------------
-  Bash\
-  jupyter-lab \--no-browser
-
-  -----------------------------------------------------------------------
-
-启动后观察是否有WARN 或ERROR ，排查故障
-
-**启用System服务**
-
-由于我们是用户级别，没有权限直接操作系统的systemd
-，好消息是，如果你的systemd版本足够，那么可以以用户身份启用任务。假设你的用户名为jupyter，那么：
-
-  -----------------------------------------------------------------------
-  Bash\
-  mkdir -p \~/.config/systemd/user
-
-  -----------------------------------------------------------------------
-
-然后创建一个Jupyter服务
-
-  -----------------------------------------------------------------------
-  Bash\
-  nano \~/.config/systemd/user/jupyter.service
-
-  -----------------------------------------------------------------------
-
-内容为
-
-  -----------------------------------------------------------------------
-  Bash\
-  \[Unit\]\
-  Description=\"Jupyter Lab Service\"\
-  After=network.target\
-  \
-  \[Service\]\
-  Type=simple\
-  WorkingDirectory=/home/jupyter\
-  ExecStart=/home/jupyter/miniconda3/envs/Jupyter/bin/jupyter-lab\
-  Restart=always\
-  \[Install\]\
-  WantedBy=multi-user.target
-
-  -----------------------------------------------------------------------
-
-WorkingDirectory ：填写你的家目录
-
-ExecStart
-：执行路径，其中的Jupyter是你的环境变量的名称，本教程创建的为Jupyter
-
-然后重载内核
-
-  -----------------------------------------------------------------------
-  Bash\
-  systemctl \--user daemon-reload
-
-  -----------------------------------------------------------------------
-
-启动服务
-
-  -----------------------------------------------------------------------
-  Bash\
-  systemctl \--user start jupyter.service
-
-  -----------------------------------------------------------------------
-
-查看状态和日志分别使用
-
-  -----------------------------------------------------------------------
-  Bash\
-  systemctl \--user status jupyter\
-  \#\
-  journalctl \--user -xue jupyter
-
-  -----------------------------------------------------------------------
-
-**启用Nginx**
-
-[参考资料](https://blog.csdn.net/qq_35808136/article/details/89677749)
-
-jupyter 服务不能单纯的使用反代理设置，需要设置反代理websocket
-
-这里不在赘述nginx的普通反代理方法，需要添加一些反代理头即可兼容ws的反代理（大概？）
-
-  -----------------------------------------------------------------------
-  Plain Text\
-  location / {\
-  proxy_pass http://127.0.0.1:8866; #通过配置端口指向部署websocker的项目\
-  proxy_set_header Upgrade \$http_upgrade;\
-  proxy_set_header Connection \"Upgrade\";\
-  proxy_set_header X-real-ip \$remote_addr;\
-  proxy_set_header X-Forwarded-For \$remote_addr;\
-  }
-
-  -----------------------------------------------------------------------
-
-更多内容移步参考资料
+# 自定义端口
+c.ServerApp.port = 8866
+
+# 允许远程访问
+c.ServerApp.allow_remote_access = True
+
+# JupyterLab 工作目录
+c.ServerApp.root_dir = '/home/jupyter/jupyterCode'
+
+# 禁用跨站请求伪造保护（按需设置）
+c.ServerApp.disable_check_xsrf = True
+
+# 内核自动重启
+c.KernelManager.autorestart = True
+
+# 允许修改密码
+c.ServerApp.allow_password_change = True
+
+# 隐藏退出按钮
+c.ServerApp.quit_button = False
+
+# 空闲超时自动关闭（0 表示永不关闭）
+c.ServerApp.shutdown_no_activity_timeout = 0
+
+# 启用终端
+c.ServerApp.terminals_enabled = True
+c.ServerApp.terminado_settings = {'shell_command': ['/bin/bash']}
+
+# 禁止 root 运行
+c.ServerApp.allow_root = False
+
+# 内存限制（32GB）
+c.ResourceUseDisplay.mem_limit = 32 * 1024 * 1024 * 1024
+
+# CPU 监控
+c.ResourceUseDisplay.track_cpu_percent = True
+c.ResourceUseDisplay.cpu_limit = 4
+```
+
+保存退出后，尝试手动启动 JupyterLab 验证配置：
+
+```bash
+jupyter-lab --no-browser
+```
+
+观察启动日志，确认无错误或警告，并通过浏览器访问 `http://<服务器IP>:8866` 测试密码登录是否正常。
+
+## 启用 Systemd 用户服务
+
+由于是普通用户，无法使用系统级 systemd，但可以启用用户级服务。
+
+### 1. 创建用户服务目录
+
+```bash
+mkdir -p ~/.config/systemd/user
+```
+
+### 2. 创建服务单元文件
+
+```bash
+nano ~/.config/systemd/user/jupyter.service
+```
+
+内容如下：
+
+```bash
+[Unit]
+Description="Jupyter Lab Service"
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/home/jupyter
+ExecStart=/home/jupyter/miniconda3/envs/Jupyter/bin/jupyter-lab
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+```
+
+> 注意：将 `WorkingDirectory` 和 `ExecStart` 中的路径替换为实际路径，确保 `ExecStart` 指向虚拟环境中的 `jupyter-lab` 可执行文件。
+
+### 3. 重新加载 systemd 用户配置
+
+```bash
+systemctl --user daemon-reload
+```
+
+### 4. 启动服务并设置开机自启
+
+```bash
+systemctl --user start jupyter.service
+systemctl --user enable jupyter.service
+```
+
+### 5. 查看服务状态与日志
+
+```bash
+# 查看状态
+systemctl --user status jupyter
+
+# 查看日志
+journalctl --user -xeu jupyter
+```
+
+## 配置 Nginx 反向代理
+
+如果需要通过域名访问 JupyterLab，并希望 Nginx 处理 HTTPS，可参考以下配置。关键是要支持 WebSocket 升级。
+
+### Nginx 配置示例
+
+```nginx
+server {
+    listen 80;
+    server_name jupyter.example.com;
+
+    location / {
+        proxy_pass http://127.0.0.1:8866;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+
+        # WebSocket 支持
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+    }
+}
+```
+
+更多细节可参考 [CSDN 文章](https://blog.csdn.net/qq_35808136/article/details/89677749) 或 [Jupyter 官方文档](https://jupyter-server.readthedocs.io/en/latest/operators/public-server.html)。
+
+## 常见问题排查
+
+- **无法访问 8866 端口**：检查防火墙是否开放该端口。
+- **密码登录失败**：确认配置文件中 `hashed_password` 的值与 `jupyter-notebook password` 生成的哈希一致。
+- **插件加载报错**：确保已更换国内镜像源并重新安装相关包。
+- **systemd 服务启动失败**：使用 `journalctl --user -xeu jupyter` 查看详细错误，检查路径是否正确、是否有权限问题。
+
+完成以上步骤后，你就可以通过浏览器安全地访问个人专属的 JupyterLab 环境了。
