@@ -1,4 +1,16 @@
 ---
+layout: false
+head:
+  - - meta
+    - http-equiv: refresh
+      content: "0; url=https://www.nuist.dev/"
+  - - link
+    - rel: canonical
+      href: https://www.nuist.dev/
+---
+
+<!--
+
 # https://vitepress.dev/reference/default-theme-home-page
 layout: home
 
